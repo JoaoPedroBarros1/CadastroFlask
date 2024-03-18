@@ -42,5 +42,11 @@ def criar():
     return redirect(url_for("index"))
 
 
+@app.route('/editar/<int:identifier>')
+def editar(identifier):
+    livro = Livro.query.filter_by(id_livro=identifier).first()
+    return render_template('editar.html', titulo='Editando livro', livro=livro)
+
+
 if __name__ == "__main__":
     app.run()
