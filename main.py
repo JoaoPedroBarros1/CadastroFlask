@@ -2,11 +2,13 @@ from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'senha_secreta'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/biblioteca'
 db = SQLAlchemy(app)
 
+
 class Livro(db.Model):
-    id_livro = db.Column(db.Integer, primary_key=True, autoIncrement=True)
+    id_livro = db.Column(db.Integer, primary_key=True, autoincrement=True)
     titulo = db.Column(db.String(100))
     autor = db.Column(db.String(254))
     ano_publicacao = db.Column(db.Integer)
@@ -23,7 +25,7 @@ def novo():
     return render_template('novo.html', titulo="Novo livro")
 
 
-@app.route('/criar', method=['POST'])
+@app.route('/criar', methods=['POST'])
 def criar():
     titulo = request.form['titulo']
     autor = request.form['autor']
@@ -38,7 +40,6 @@ def criar():
     db.session.add(novo_livro)
     db.session.commit()
     return redirect(url_for("index"))
-
 
 
 if __name__ == "__main__":
