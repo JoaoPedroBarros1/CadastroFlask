@@ -48,5 +48,26 @@ def editar(identifier):
     return render_template('editar.html', titulo='Editando livro', livro=livro)
 
 
+@app.route('/atualizar', methods=['POST'])
+def atualizar():
+    livro = Livro.query.filter_by(id_livro=request.form['id']).first()
+    livro.titulo = request.form['titulo']
+    livro.autor = request.form['autor']
+    livro.ano_publicacao = request.form['ano_publicacao']
+
+    db.session.add(livro)
+    db.session.commit()
+
+    return redirect(url_for('index'))
+
+
+@app.route('/deletar/<int:identifier>')
+def deletar(identifier):
+    Livro.query.filter_by(id_livro=identifier).delete()
+    db.session.commit()
+    flash('Livro excluido com sucesso.')
+    return redirect(url_for('index'))
+
+
 if __name__ == "__main__":
     app.run()
